@@ -8,6 +8,7 @@
 %       insertion loss measurement. Otherwise it size(gamma) must be equal
 %       to size(il)
 %   thickness: thickness of the fragment. Units can be anything desired -
+%       it just sets the units of atten
 % @OUTPUTS:
 %   atten: estimation of the attenuation for each il in nepers/length where
 %       the units of length are set by the units of the input variable

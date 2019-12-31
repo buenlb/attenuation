@@ -1,5 +1,6 @@
 % Estimates the reflection coefficient, gamma, using measurements of the
-% velocity and density of the sample
+% velocity and density of the sample. Uses the assumptions of semi-infinite
+% layers
 % 
 % @INPUT
 %   c: acoustic velocity in the fragment. May be a scalar or a vector
