@@ -53,14 +53,20 @@ leung = bonePropertiesLeung2018(false,curFreq,beta2);
 vyas = bonePropertiesVyas2016(false,curFreq,beta2);
 pulkkinen = bonePropertiesPulkkinen2014(false,curFreq,beta2,270);
 % aubryBeta = myLog(curFreq/1.5,(1/1.5)^beta3*(curFreq^beta2));
-aubry = bonePropertiesAubry2003(false,curFreq,beta1,2/3*CtData.energies(ctIdx));
-
+ctHdr.Manufacturer = 'siemens';
+ctHdr.ConvolutionKernel = 'H60s';
+ctHdr.KVP = 120;
+aubry = bonePropertiesAubry2003(false,curFreq,beta1,1/2*CtData.energies(ctIdx));
+mcdannold.hu = 0:10:2500;
+[~,~,tmpAtten] = mcdannold2020(mcdannold.hu, 2000, ctHdr, 0.66e6);
+mcdannold.atten = tmpAtten*(0.5/0.66)^beta1;
 % frequencyScalar = (1/0.68)^2;
 % f1 = figure; hold on;
 plot(aubry.hu, aubry.atten, 'linewidth', 2, 'displayname', 'Aubry{\it et al.} 2003');
-plot(leung.hu(6:end), leung.atten(6:end), 'linewidth', 2, 'displayname', 'Leung {\it et al.}');
+plot(leung.hu(6:end), leung.atten(6:end), 'linewidth', 2, 'displayname', 'Leung {\it et al.} 2019');
 plot(pulkkinen.hu, pulkkinen.atten, 'linewidth', 2, 'displayname', 'Pichardo{\it et al.} 2011');
 plot(vyas.hu(6:end), vyas.atten(6:end), 'linewidth', 2, 'displayname', 'Vyas{\it et al.} 2016');
+plot(mcdannold.hu, mcdannold.atten, 'linewidth', 2, 'displayname', 'McDannold {\it et al.} 2020');
 hold off;
 makeFigureBig(f1,24,24)
 xlim([0, 2500]);
@@ -93,7 +99,9 @@ ax.ColorOrderIndex = 2;
 leung = bonePropertiesLeung2018(false,1,beta2);
 vyas = bonePropertiesVyas2016(false,1,beta2);
 pulkkinen = bonePropertiesPulkkinen2014(false,1,beta2,836);
-aubry = bonePropertiesAubry2003(false,1,beta3,2/3*CtData.energies(ctIdx));
+aubry = bonePropertiesAubry2003(false,1,beta3,1/2*CtData.energies(ctIdx));
+[~,~,tmpAtten] = mcdannold2020(mcdannold.hu, 2000, ctHdr, 1000e3);
+mcdannold.atten = tmpAtten*(1/0.66)^beta1;
 
 % frequencyScalar = (1/0.68)^2;
 % f1 = figure; hold on;
@@ -101,6 +109,7 @@ plot(aubry.hu, aubry.atten, 'linewidth', 2, 'displayname', 'Aubry{\it et al.} 20
 plot(leung.hu(6:end), leung.atten(6:end), 'linewidth', 2, 'displayname', 'Leung {\it et al.}');
 plot(pulkkinen.hu, pulkkinen.atten, 'linewidth', 2, 'displayname', 'Pichardo{\it et al.} 2011');
 plot(vyas.hu(6:end), vyas.atten(6:end), 'linewidth', 2, 'displayname', 'Vyas{\it et al.} 2016');
+plot(mcdannold.hu, mcdannold.atten, 'linewidth', 2, 'displayname', 'McDannold {\it et al.} 2020');
 hold off;
 makeFigureBig(f1,24,24)
 xlim([0, 2500]);
@@ -138,14 +147,17 @@ ax.ColorOrderIndex = 2;
 leung = bonePropertiesLeung2018(false,freq,beta1);
 vyas = bonePropertiesVyas2016(false,freq,beta1);
 pulkkinen = bonePropertiesPulkkinen2014(false,freq,beta3,1402);
-aubry = bonePropertiesAubry2003(false,freq,beta3,2/3*CtData.energies(ctIdx));
+aubry = bonePropertiesAubry2003(false,freq,beta3,1/2*CtData.energies(ctIdx));
+[~,~,tmpAtten] = mcdannold2020(mcdannold.hu, 2000, ctHdr, 2250e3);
+mcdannold.atten = tmpAtten*(2.25/0.66)^beta1;
 
 % frequencyScalar = (1/0.68)^2;
 % f1 = figure; hold on;
 plot(aubry.hu, aubry.atten, 'linewidth', 2, 'displayname', 'Aubry{\it et al.} 2003');
-plot(leung.hu(6:end), leung.atten(6:end), 'linewidth', 2, 'displayname', 'Leung {\it et al.}');
+plot(leung.hu(6:end), leung.atten(6:end), 'linewidth', 2, 'displayname', 'Leung {\it et al.} 2019');
 plot(pulkkinen.hu, pulkkinen.atten, 'linewidth', 2, 'displayname', 'Pichardo{\it et al.} 2011');
 plot(vyas.hu(6:end), vyas.atten(6:end), 'linewidth', 2, 'displayname', 'Vyas{\it et al.} 2016');
+plot(mcdannold.hu, mcdannold.atten, 'linewidth', 2, 'displayname', 'McDannold {\it et al.} 2019');
 hold off;
 makeFigureBig(f1,24,24)
 xlim([0, 2500]);

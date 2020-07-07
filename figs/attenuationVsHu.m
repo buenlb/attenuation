@@ -4,9 +4,9 @@ if ~exist('atten500','var')
     runAttenuation
 end
 %% Use only the thick enough fragments
-[fragsIdx500,fragsIdx1000,fragsIdx2250,fragsIdx500Layers,fragsIdx1000Layers,fragsIdx2250Layers] = screenFragments(FragData);
+[fragsIdx500,fragsIdx1000,fragsIdx2250,fragsIdx500Layers,fragsIdx1000Layers,fragsIdx2250Layers] = screenFragments(FragData,0,0);
 %% Plot all the fragments vs HU
-ctIdx = find(strcmp(CtData.kernels,'Soft Tissue') & CtData.energies==120 & strcmp(CtData.vendor,'GE') & strcmp(CtData.reconMethod,'MBIR'));
+ctIdx = find(strcmp(CtData.kernels,'Bone') & CtData.energies==120 & strcmp(CtData.vendor,'GE') & strcmp(CtData.reconMethod,'Standard'));
 ctIdx = ctIdx(1);
 hu = zeros(size(FragData'));
 for ii = 1:length(FragData)
@@ -73,7 +73,7 @@ ylabel('Attenuation (np/cm)')
 axis([min(x2250),max(x2250),0,max(y2250)])
 title('Comparing Without Unknown Fragments')
 makeFigureBig(h)
-keyboard
+
 %% Plot vs HU
 h = figure;
 hold on
@@ -95,7 +95,7 @@ makeFigureBig(h)
 if exist('imgPath','var')
     print([imgPath, 'figs/ctVatten'], '-depsc')
 end
-keyboard
+
 %% Include 2_120M in the fits
 % 500 kHz
 [~,~,~,fragsIdx500_120,fragsIdx1000_120,fragsIdx2250_120] = screenFragments(FragData,1);

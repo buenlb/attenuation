@@ -35,6 +35,8 @@
 
 function [idx500,idx1000,idx2250,idx500Layers,idx1000Layers,idx2250Layers,sk1,sk2,it,ot,md] = screenFragments(FragData,include120,threshold)
 
+SIMPLETHICKNESS = 1;
+
 if ~exist('threshold','var')
     threshold = 11;
 end
@@ -49,100 +51,165 @@ if nargin < 2
     include120 = 0;
 end
 
-%------------------------------------------------------------------------%
-% 0.5 MHz
-%------------------------------------------------------------------------%
-s = FragData(1).Attenuation.kHz500.RawData.pnb{1};
-t = FragData(1).Attenuation.kHz500.RawData.t;
+if SIMPLETHICKNESS
+    disp('Comparing to a wavelength')
+    c = 2200;
+    lambda500 = c/500e3;
+    lambda1000 = c/1000e3;
+    lambda2250 = c/2250e3;
+    
+    idx500 = [];
+    idx1000 = [];
+    idx2250 = [];
+    idx500Layers = [];
+    idx1000Layers = [];
+    idx2250Layers = [];
+    sk1 = [];
+    sk2 = [];
 
-idx_11dB = find(20*log10(abs(s)/max(abs(s)))>=-threshold);
-pulseLength = t(idx_11dB(end))-t(idx_11dB(1));
+    it = [];
+    ot = [];
+    md = [];
 
-%------------------------------------------------------------------------%
-% 1 MHz
-%------------------------------------------------------------------------%
-s = FragData(5).Attenuation.kHz1000.RawData.pnb{1};
-t = FragData(5).Attenuation.kHz1000.RawData.t;
+    idx_120M = findFragIdx(FragData,'2_120M');
+    for ii = 1:length(FragData)
+        if ii == idx_120M && ~include120
+            continue
+        end
+        wvLengthMultiplier = 1;
+        if wvLengthMultiplier*lambda500 <= FragData(ii).thickness
+            idx500(end+1) = ii;
+            if ~strcmp(FragData(ii).Layer,'Unknown')
+                idx500Layers(end+1) = ii;
+            end
+        end
+    
+        if wvLengthMultiplier*lambda1000 <= FragData(ii).thickness
+            idx1000(end+1) = ii;
+            if ~strcmp(FragData(ii).Layer,'Unknown')
+                idx1000Layers(end+1) = ii;
+            end
+        end
 
-idx_11dB = find(20*log10(abs(s)/max(abs(s)))>=-threshold);
-pulseLength1000 = t(idx_11dB(end))-t(idx_11dB(1));
+        if wvLengthMultiplier*lambda2250 <= FragData(ii).thickness
+            idx2250(end+1) = ii;
+            if ~strcmp(FragData(ii).Layer,'Unknown')
+                idx2250Layers(end+1) = ii;
+            end
+        end
+    
+        if str2double(FragData(ii).oldFragName(1)) == 1
+            sk1(end+1) = ii;
+        end
 
-%------------------------------------------------------------------------%
-% 0.5 MHz
-%------------------------------------------------------------------------%
-s = FragData(1).Attenuation.kHz2250.RawData.pnb{1};
-t = FragData(1).Attenuation.kHz2250.RawData.t;
+        if str2double(FragData(ii).oldFragName(1)) == 2
+            sk2(end+1) = ii;
+        end
 
-idx_11dB = find(20*log10(abs(s)/max(abs(s)))>=-threshold);
-pulseLength2250 = t(idx_11dB(end))-t(idx_11dB(1));
-
-%------------------------------------------------------------------------%
-% Find Fragments
-%------------------------------------------------------------------------%
-idx500 = [];
-idx1000 = [];
-idx2250 = [];
-idx500Layers = [];
-idx1000Layers = [];
-idx2250Layers = [];
-sk1 = [];
-sk2 = [];
-
-it = []
-ot = []
-md = []
-
-
-% Remove 120M
-idx_120M = findFragIdx(FragData,'2_120M');
-
-for ii = 1:length(FragData)
-    if ii == idx_120M && ~include120
-        continue
-    end
-    c = mean(FragData(ii).Velocity.measuredVelocity);
-    spatialPulseLength = pulseLength*c;
-    spatialPulseLength1000 = pulseLength1000*c;
-    spatialPulseLength2250 = pulseLength2250*c;
-    if 0.5*spatialPulseLength <= FragData(ii).thickness
-        idx500(end+1) = ii;
-        if ~strcmp(FragData(ii).Layer,'Unknown')
-            idx500Layers(end+1) = ii;
+        if strcmp('Outer Table',FragData(ii).Layer)
+            ot(end+1) = ii;
+        elseif strcmp('Inner Table', FragData(ii).Layer)
+            it(end+1) = ii;
+        elseif strcmp('Trabecular', FragData(ii).Layer)
+            md(end+1) = ii;
         end
     end
-    
-    if 0.5*spatialPulseLength1000 <= FragData(ii).thickness
-        idx1000(end+1) = ii;
-        if ~strcmp(FragData(ii).Layer,'Unknown')
-            idx1000Layers(end+1) = ii;
+else
+    disp('Comparing to pulse width')
+    %------------------------------------------------------------------------%
+    % 0.5 MHz
+    %------------------------------------------------------------------------%
+    s = FragData(1).Attenuation.kHz500.RawData.pnb{1};
+    t = FragData(1).Attenuation.kHz500.RawData.t;
+
+    idx_11dB = find(20*log10(abs(s)/max(abs(s)))>=-threshold);
+    pulseLength = t(idx_11dB(end))-t(idx_11dB(1));
+
+    %------------------------------------------------------------------------%
+    % 1 MHz
+    %------------------------------------------------------------------------%
+    s = FragData(5).Attenuation.kHz1000.RawData.pnb{1};
+    t = FragData(5).Attenuation.kHz1000.RawData.t;
+
+    idx_11dB = find(20*log10(abs(s)/max(abs(s)))>=-threshold);
+    pulseLength1000 = t(idx_11dB(end))-t(idx_11dB(1));
+
+    %------------------------------------------------------------------------%
+    % 2.25 MHz
+    %------------------------------------------------------------------------%
+    s = FragData(1).Attenuation.kHz2250.RawData.pnb{1};
+    t = FragData(1).Attenuation.kHz2250.RawData.t;
+
+    idx_11dB = find(20*log10(abs(s)/max(abs(s)))>=-threshold);
+    pulseLength2250 = t(idx_11dB(end))-t(idx_11dB(1));
+
+    %------------------------------------------------------------------------%
+    % Find Fragments
+    %------------------------------------------------------------------------%
+    idx500 = [];
+    idx1000 = [];
+    idx2250 = [];
+    idx500Layers = [];
+    idx1000Layers = [];
+    idx2250Layers = [];
+    sk1 = [];
+    sk2 = [];
+
+    it = []
+    ot = []
+    md = []
+
+
+    % Remove 120M
+    idx_120M = findFragIdx(FragData,'2_120M');
+
+    for ii = 1:length(FragData)
+        if ii == idx_120M && ~include120
+            continue
+        end
+        c = mean(FragData(ii).Velocity.measuredVelocity);
+        spatialPulseLength = pulseLength*c;
+        spatialPulseLength1000 = pulseLength1000*c;
+        spatialPulseLength2250 = pulseLength2250*c;
+        if 0.5*spatialPulseLength <= FragData(ii).thickness
+            idx500(end+1) = ii;
+            if ~strcmp(FragData(ii).Layer,'Unknown')
+                idx500Layers(end+1) = ii;
+            end
+        end
+
+        if 0.5*spatialPulseLength1000 <= FragData(ii).thickness
+            idx1000(end+1) = ii;
+            if ~strcmp(FragData(ii).Layer,'Unknown')
+                idx1000Layers(end+1) = ii;
+            end
+        end
+
+        if 0.5*spatialPulseLength2250 <= FragData(ii).thickness
+            idx2250(end+1) = ii;
+            if ~strcmp(FragData(ii).Layer,'Unknown')
+                idx2250Layers(end+1) = ii;
+            end
+        end
+
+        if str2double(FragData(ii).oldFragName(1)) == 1
+            sk1(end+1) = ii;
+        end
+
+        if str2double(FragData(ii).oldFragName(1)) == 2
+            sk2(end+1) = ii;
+        end
+
+        if strcmp('Outer Table',FragData(ii).Layer)
+            ot(end+1) = ii;
+        elseif strcmp('Inner Table', FragData(ii).Layer)
+            it(end+1) = ii;
+        elseif strcmp('Trabecular', FragData(ii).Layer)
+            md(end+1) = ii;
         end
     end
-    
-    if 0.5*spatialPulseLength2250 <= FragData(ii).thickness
-        idx2250(end+1) = ii;
-        if ~strcmp(FragData(ii).Layer,'Unknown')
-            idx2250Layers(end+1) = ii;
-        end
-    end
-    
-    if str2double(FragData(ii).oldFragName(1)) == 1
-        sk1(end+1) = ii;
-    end
-    
-    if str2double(FragData(ii).oldFragName(1)) == 2
-        sk2(end+1) = ii;
-    end
-    
-    if strcmp('Outer Table',FragData(ii).Layer)
-        ot(end+1) = ii;
-    elseif strcmp('Inner Table', FragData(ii).Layer)
-        it(end+1) = ii;
-    elseif strcmp('Trabecular', FragData(ii).Layer)
-        md(end+1) = ii;
-    end
+    disp('Fragment Thickness Results:')
+    disp(['    500 kHz: ', num2str(spatialPulseLength*1e3), ' mm'])
+    disp(['    1000 kHz: ', num2str(spatialPulseLength1000*1e3), ' mm'])
+    disp(['    2250 kHz: ', num2str(spatialPulseLength2250*1e3), ' mm'])
 end
-
-disp('Fragment Thickness Results:')
-disp(['    500 kHz: ', num2str(spatialPulseLength*1e3), ' mm'])
-disp(['    1000 kHz: ', num2str(spatialPulseLength1000*1e3), ' mm'])
-disp(['    2250 kHz: ', num2str(spatialPulseLength2250*1e3), ' mm'])

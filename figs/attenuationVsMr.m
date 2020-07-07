@@ -84,10 +84,12 @@ plt500(2) = errorbar(x500_ute,y500,std500/2,'o','linewidth',2,'markersize',8,'Co
 ftPlot(2) = plot(x2_500_ute,y2_500_ute,'--','linewidth',2,'markersize',8,'Color',ax.ColorOrder(2,:));
 grid on
 lgd = legend(plt500,{'ZTE','UTE'},'location','northwest');
+axis([0,1,0,20])
 
 ah=axes('position',get(gca,'position'),'visible','off');
 lgd2 = legend(ah,ftPlot,{['R^2: ',num2str(r500_zte,2)],['R^2: ',num2str(r500_ute,2)]},'location','southeast');
-set(lgd2,'position',[0.6706    0.2388    0.2825    0.2164])
+set(lgd2,'position',[0.5903    0.6773    0.2825    0.2250]);
+% set(lgd2,'position',[0.6706    0.2388    0.2825    0.2164])
 makeFigureBig(h,fSize,fSize);
 axes(ax);
 xlabel('Normalized Magnitude');
@@ -108,14 +110,15 @@ ftPlot(1) = plot(x2_1000_zte,y2_1000_zte,'--','linewidth',2,'markersize',8,'Colo
 plt1000(2) = errorbar(x1000_ute,y1000,std1000/2,'o','linewidth',2,'markersize',8,'Color',ax.ColorOrder(2,:));
 ftPlot(2) = plot(x2_1000_ute,y2_1000_ute,'--','linewidth',2,'markersize',8,'Color',ax.ColorOrder(2,:));
 grid on
-lgd = legend(plt1000,{'ZTE','UTE'});
+lgd = legend(plt1000,{'ZTE','UTE'},'location','northwest');
 
 ah=axes('position',get(gca,'position'),'visible','off');
 lgd2 = legend(ah,ftPlot,{['R^2: ',num2str(r1000_zte,2)],['R^2: ',num2str(r1000_ute,2)]},'location','southeast');
-set(lgd2,'position',[0.6706    0.2388    0.2825    0.2164])
+set(lgd2,'position',[0.5903    0.6773    0.2825    0.2250]);
+% set(lgd2,'position',[0.6706    0.2388    0.2825    0.2164])
 makeFigureBig(h,fSize,fSize);
 axes(ax);
-axis([0,1,min(y1000),max(y1000+std1000/2)])
+axis([0,1,0,20])
 xlabel('Normalized Magnitude');
 ylabel('Attenuation (Np/cm)')
 makeFigureBig(h,fSize,fSize);
@@ -141,7 +144,7 @@ lgd2 = legend(ah,ftPlot,{['R^2: ',num2str(r2250_zte,2)],['R^2: ',num2str(r2250_u
 set(lgd2,'position',[0.6706    0.2388    0.2825    0.2164])
 makeFigureBig(h,fSize,fSize);
 axes(ax);
-axis([0,1,min(y2250),max(y2250+std2250/2)])
+axis([0,1,0,20])
 xlabel('Normalized Magnitude');
 ylabel('Attenuation (Np/cm)')
 makeFigureBig(h,fSize,fSize);
@@ -160,9 +163,10 @@ ax = gca;
 plt500 = errorbar(x500_t2,y500,std500/2,'o','linewidth',2,'markersize',8);
 ftPlot(1) = plot(x2_500_t2,y2_500_t2,'--','linewidth',2,'markersize',8,'Color',ax.ColorOrder(1,:));
 grid on
-lgd = legend(ftPlot,{['R^2: ', num2str(r500_t2,2)]},'location','southeast');
+lgd = legend(ftPlot,{['R^2: ', num2str(r500_t2,2)]},'location','northeast');
 ylabel('Attenuation (Np/cm)')
 xlabel('T2* (ms)')
+axis([0,3,0,20])
 makeFigureBig(h,fSize,fSize);
 
 if exist('imgPath','var')
@@ -177,9 +181,10 @@ ax = gca;
 plt1000 = errorbar(x1000_t2,y1000,std1000/2,'o','linewidth',2,'markersize',8);
 ftPlot(1) = plot(x2_1000_t2,y2_1000_t2,'--','linewidth',2,'markersize',8,'Color',ax.ColorOrder(1,:));
 grid on
-lgd = legend(ftPlot,{['R^2: ', num2str(r1000_t2,2)]},'location','southeast');
+lgd = legend(ftPlot,{['R^2: ', num2str(r1000_t2,2)]},'location','northeast');
 ylabel('Attenuation (Np/cm)')
 xlabel('T2* (ms)')
+axis([0,3,0,20])
 makeFigureBig(h,fSize,fSize);
 
 if exist('imgPath','var')
@@ -197,6 +202,7 @@ grid on
 lgd = legend(ftPlot,{['R^2: ', num2str(r2250_t2,2)]},'location','southeast');
 ylabel('Attenuation (Np/cm)')
 xlabel('T2* (ms)')
+axis([0,3,0,20])
 makeFigureBig(h,fSize,fSize);
 
 if exist('imgPath','var')

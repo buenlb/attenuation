@@ -1,6 +1,5 @@
 function pulkkinen = bonePropertiesPulkkinen2014(createFigFlag,freq,beta,freq2)
 % Pulkkinen 2014
-% center frequency at 0.65 MHz
 
 connor = bonePropertiesConnor2002(createFigFlag);
 

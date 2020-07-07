@@ -233,7 +233,6 @@ fprintf(fid,'\t%s\n',['\caption{Table of slope, y-intercept and R-squared values
 fprintf(fid,'\t%s\n','\centering');
 
 writeLatexTable(input,fid,'tabularx',0.73)
-
 fprintf(fid,'%s\n','\label{tab:huVattenGE}');
 fprintf(fid,'%s\n','\end{table*}');
 

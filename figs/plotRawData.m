@@ -17,7 +17,7 @@ dt = t(2)-t(1);
 f500 = fftX(dt,length(t));
 PB500 = abs(fft(pb));
 PNB500 = abs(fft(pnb));
-
+grid on
 plot(t,pnb,'-',t,pb,'--','linewidth',2,'Color',ax.ColorOrder(1,:))
 
 axis([34,46,min(pnb),max(pnb)]);
@@ -46,6 +46,7 @@ ylabel('voltage (mV)')
 axis([78,90,min(pnb),max(pnb)]);
 xticks('');
 yticks([100])
+grid on
 makeFigureBig(h,fSize,fSize)
 % set(h,'position',[488.0000  581.8000  381.0000  180.2000]);
 
@@ -75,10 +76,11 @@ makeFigureBig(h,fSize,fSize)
 sp4 = subplot(414);
 hold on;
 ax = gca;
-plot(f500,10*log10(PNB500/max(PNB500)),'-',f500,10*log10(PB500/max(PNB500)),'--','linewidth',2,'Color',ax.ColorOrder(1,:))
-plot(f1000,10*log10(PNB1000/max(PNB1000)),'-',f1000,10*log10(PB1000/max(PNB1000)),'--','linewidth',2,'Color',ax.ColorOrder(2,:))
-plot(f2250,10*log10(PNB2250/max(PNB2250)),'-',f2250,10*log10(PB2250/max(PNB2250)),'--','linewidth',2,'Color',ax.ColorOrder(3,:))
-axis([0,4,-30,0])
+plot(f500,20*log10(PNB500/max(PNB500)),'-',f500,20*log10(PB500/max(PNB500)),'-.','linewidth',2,'Color',ax.ColorOrder(1,:))
+plot(f1000,20*log10(PNB1000/max(PNB1000)),'-',f1000,20*log10(PB1000/max(PNB1000)),'-.','linewidth',2,'Color',ax.ColorOrder(2,:))
+plot(f2250,20*log10(PNB2250/max(PNB2250)),'-',f2250,20*log10(PB2250/max(PNB2250)),'-.','linewidth',2,'Color',ax.ColorOrder(3,:))
+plot([0,4],[-10,-10],'k:','linewidth',2)
+axis([0,4,-50,0])
 
 plt = plot(-1,-1,'-','Color',ax.ColorOrder(1,:),'linewidth',2);
 plt(2) = plot(-1,-1,'-','Color',ax.ColorOrder(2,:),'linewidth',2);
@@ -92,6 +94,7 @@ if plotLgd
     lgd = legend(plt,{'0.5 MHz','1 MHz','2.25 MHz','No Frag', 'Frag'});
     set(lgd,'position',[    0.6885    0.1719    0.2939    0.3480]);
 end
+grid on
 makeFigureBig(h,fSize,fSize)
 set(sp4,'position',[ 0.1619    0.7    0.7431    0.28])
 set(sp1,'position',[ 0.1619    0.4    0.7431    0.1])

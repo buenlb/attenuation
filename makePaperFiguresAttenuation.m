@@ -1,12 +1,13 @@
 % This script generates the figures for the attenuation paper
 close all; clc
 if 1
-    imgPath = 'C:\Users\Taylor\Documents\Stanford\Work\Papers\Attenuation\';
+    imgPath = 'C:\Users\Taylor\Documents\Stanford\Work\Papers\Attenuation2\';
 end
 
 addpath('..');
 addpath('../..');
 addpath('figs');
+addpath('lib');
 
 %% Thickness Histogram
 thicknessHistogram;
@@ -17,8 +18,8 @@ attenuationVsHu;
 %% vs MR
 attenuationVsMr
 %% Results Tables
-resultsTable;
-
+resultsTableMultiParam;
+return
 %% Fragment Table for appendix
 fragmentTable;
 

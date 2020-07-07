@@ -9,7 +9,7 @@
 %   pnb: acoustic wavefore measured without the bone present (no bone)
 %   dt: Sampling period for accurate estimation of frequency components
 %   idx20dB: Optional. The indices at which the signal is considered
-%       sufficiently high to accept the result. Defaults to anywhere that
+%       sufficiently high to accept th1 result. Defaults to anywhere that
 %       the Fourier coefficient is greater than -20 dB relative to the
 %       maximum
 % 
@@ -30,11 +30,11 @@ PB = abs(fftshift(fft(pb)));
 PNB = abs(fftshift(fft(pnb)));
 
 il = PB./PNB;
-
 if nargin < 4
     idx20dB = find(20*log10(PNB/max(PNB))>-10);
     idx20dB = idx20dB(idx20dB>floor(length(PNB)/2));
 end
 
+% il(20*log10(PB/max(PB)<-40)) = nan;
 il = il(idx20dB);
 f = f(idx20dB)/1e6;

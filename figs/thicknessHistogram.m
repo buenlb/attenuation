@@ -42,3 +42,18 @@ set(h, 'position', [488.0000  342.0000  560.0000  267.8000]);
 if exist('imgPath','var')
     print([imgPath, 'figs/thicknessHist'], '-depsc')
 end
+
+%% Show fragments considered good enough.
+[~,~,~,fragsIdx500Layers,fragsIdx1000Layers,fragsIdx2250Layers,sk1,sk2,it,ot,md] = screenFragments(FragData);
+disp('Thick Enough Fragments:')
+disp('  500 kHz')
+disp(['    Total: ', num2str(length(fragsIdx500Layers)), ', OT: ', num2str(length(intersect(fragsIdx500Layers,ot))),...
+    ', MD: ', num2str(length(intersect(fragsIdx500Layers,md))), ', IT: ', num2str(length(intersect(fragsIdx500Layers,it)))])
+
+disp('  1000 kHz')
+disp(['    Total: ', num2str(length(fragsIdx1000Layers)), ', OT: ', num2str(length(intersect(fragsIdx1000Layers,ot))),...
+    ', MD: ', num2str(length(intersect(fragsIdx1000Layers,md))), ', IT: ', num2str(length(intersect(fragsIdx1000Layers,it)))])
+
+disp('  2250 kHz')
+disp(['    Total: ', num2str(length(fragsIdx2250Layers)), ', OT: ', num2str(length(intersect(fragsIdx2250Layers,ot))),...
+    ', MD: ', num2str(length(intersect(fragsIdx2250Layers,md))), ', IT: ', num2str(length(intersect(fragsIdx2250Layers,it)))])

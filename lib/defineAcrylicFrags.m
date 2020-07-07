@@ -20,7 +20,7 @@ function acrylicFrags = defineAcrylicFrags(path)
 %% Define Acrylic Fragments
 kHz = struct('pb',[],'pnb',[],'t',[]);
 Attenuation = struct('kHz500',kHz,'kHz1000',kHz,'kHz2250',kHz);
-acrylicFrags0 = struct('thickness',[],'c',2786,'rho',1180,'Attenuation',Attenuation);
+acrylicFrags0 = struct('thickness',[],'c',2750,'rho',1190,'Attenuation',Attenuation);
 for ii = 1:12
     acrylicFrags(ii) = acrylicFrags0;
 end
@@ -62,9 +62,9 @@ path2250 = [path,'2250kHz\'];
 files = dir(path500);
 if isempty(files)
     warning(['No Files Found in ', path500])
-    acrylicFrags.Attenuation.pb = [];
-    acrylicFrags.Attenuation.pnb = [];
-    acrylicFrags.Attenuation.t = [];
+%     acrylicFrags.Attenuation.pb = [];
+%     acrylicFrags.Attenuation.pnb = [];
+%     acrylicFrags.Attenuation.t = [];
 else
     curIdx = 1;
     for ii = 1:length(files)

@@ -21,20 +21,21 @@ function [a,b,gof] = myNonlinearFit(x,y)
 ft = fittype( 'power1' );
 opts = fitoptions( 'Method', 'NonlinearLeastSquares' );
 opts.Display = 'Off';
-
+% opts.Lower = [2.49 -Inf];
+% opts.StartPoint = [3.33647011232401 2.49];
+% opts.Upper = [2.49 Inf];
 % Fit model to data.
 [fitresult, gof] = fit( xData, yData, ft, opts );
 
 % Plot fit with data.
-figure( 'Name', 'Fit' );
-h = plot( fitresult, xData, yData );
-legend( h, 'Data', 'Fit', 'Location', 'NorthEast' );
-% Label axes
-xlabel x
-ylabel y
-grid on
+% figure( 'Name', 'Fit' );
+% h = plot( fitresult, xData, yData );
+% legend( h, 'Data', 'Fit', 'Location', 'NorthEast' );
+% % Label axes
+% xlabel x
+% ylabel y
+% grid on
 
 a = fitresult.a;
 b = fitresult.b;
-
 
